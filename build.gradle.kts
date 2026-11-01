@@ -46,7 +46,9 @@ dependencies {
     compileOnly(project(":spigot"))
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_21
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
+}
 
 tasks.named<ShadowJar>("shadowJar") {
     archiveClassifier.set("")
@@ -63,6 +65,7 @@ publishing {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
+    options.release.set(25)
 }
 
 tasks.withType<Javadoc> {
@@ -84,17 +87,17 @@ minecraftServers {
     libName.set("${project.name}-${version}.jar")
     val debugPortMapping = "${debugPort}:${debugPort}"
     servers {
-        register("spigot_1_21") {
-            version.set("1.21.8")
+        register("spigot_26_3") {
+            version.set("26.3")
             type.set("SPIGOT")
             extraEnv.put("BUILD_FROM_SOURCE", "true")
-            imageVersion.set("java21-graalvm") // graalvm contains the jdk required to build from source
+            imageVersion.set("java25") // full JDK image, needed to compile Spigot from source
             ports.set(setOf(debugPortMapping, "25569:25565"))
         }
-        register("paper_1_21") {
-            version.set("1.21.8")
+        register("paper_26_3") {
+            version.set("26.3")
             type.set("PAPER")
-            imageVersion.set("java21")
+            imageVersion.set("java25")
             ports.set(setOf("5007:5007", "25570:25565"))
         }
     }
@@ -125,7 +128,7 @@ modrinth {
     versionType.set("release") // TODO: Automatically determine this from the version
     uploadFile.set(tasks.shadowJar) // Use the shadowed jar !!
     changelog.set(System.getenv("CHANGELOG"))
-    gameVersions.addAll("1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8") // Must be an array, even with only one version
+    gameVersions.addAll("26.1", "26.1.1", "26.1.2", "26.2", "26.3") // Must be an array, even with only one version
     loaders.addAll("bukkit", "spigot", "paper", "purpur") // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
     dependencies { // A special DSL for creating dependencies
         // scope.type

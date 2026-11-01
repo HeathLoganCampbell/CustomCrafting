@@ -67,7 +67,7 @@ class ButtonSettingsLanguage extends ActionButton<CCCache> {
             return true;
         }, (CallbackButtonRender<CCCache>) (cache, guiHandler, player, inventory, itemStack, slot) -> {
             int index = availableLangs.indexOf(customCrafting.getConfigHandler().getConfig().getLanguage());
-            return CallbackButtonRender.UpdateResult.of(TagResolverUtil.entries(availableLangs.stream().map(s -> Component.text(s).asComponent()).toList(), Component.empty(), index));
+            return CallbackButtonRender.UpdateResult.of(TagResolverUtil.entries(availableLangs.stream().map(s -> (Component) Component.text(s)).toList(), Component.empty(), index));
         }));
     }
 }

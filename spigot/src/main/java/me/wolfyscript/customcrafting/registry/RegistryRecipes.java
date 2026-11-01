@@ -438,7 +438,8 @@ public final class RegistryRecipes extends RegistrySimple<CustomRecipe<?>> {
         return get(result.hasNamespacedKey() ?
             new StackReference(
                 WolfyUtilCore.getInstance(),
-                new WolfyUtilsStackIdentifier(result.getNamespacedKey()), result.getWeight(), result.getAmount(), result.getItemStack()
+                result.getAmount(), result.getWeight(),
+                new WolfyUtilsStackIdentifier(result.getNamespacedKey()), result.getItemStack()
             ) : result.stackReference()
         );
     }

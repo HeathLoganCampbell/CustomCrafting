@@ -56,7 +56,9 @@ dependencies {
     compileOnly(libs.nbtapi)
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_21
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
+}
 
 tasks.named<ProcessResources>("processResources") {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
@@ -84,6 +86,7 @@ publishing {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
+    options.release.set(25)
 }
 
 tasks.withType<Javadoc> {

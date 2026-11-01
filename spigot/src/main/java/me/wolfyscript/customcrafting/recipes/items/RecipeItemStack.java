@@ -126,11 +126,11 @@ public abstract class RecipeItemStack {
     }
 
     protected RecipeItemStack(Material... materials) {
-        this(Arrays.stream(materials).map(material -> new StackReference(WolfyUtilCore.getInstance(), new BukkitStackIdentifier(new ItemStack(material)), 1, 1, new ItemStack(material))).collect(Collectors.toList()), new LinkedHashSet<>());
+        this(Arrays.stream(materials).map(material -> new StackReference(WolfyUtilCore.getInstance(), 1, 1, new BukkitStackIdentifier(new ItemStack(material)), new ItemStack(material))).collect(Collectors.toList()), new LinkedHashSet<>());
     }
 
     protected RecipeItemStack(ItemStack... items) {
-        this(Arrays.stream(items).map(stack -> new StackReference(WolfyUtilCore.getInstance(), new BukkitStackIdentifier(stack), 1, 1, stack)).collect(Collectors.toList()), new LinkedHashSet<>());
+        this(Arrays.stream(items).map(stack -> new StackReference(WolfyUtilCore.getInstance(), 1, 1, new BukkitStackIdentifier(stack), stack)).collect(Collectors.toList()), new LinkedHashSet<>());
     }
 
     protected RecipeItemStack(NamespacedKey... tags) {
@@ -181,7 +181,7 @@ public abstract class RecipeItemStack {
             if (namespacedKey.getNamespace().equals("minecraft")) {
                 Tag<Material> tag = Bukkit.getTag("items", org.bukkit.NamespacedKey.minecraft(namespacedKey.getKey()), Material.class);
                 if (tag != null) {
-                    return tag.getValues().stream().map(material -> new StackReference(WolfyUtilCore.getInstance(), BukkitStackIdentifier.ID, 1, 1, new ItemStack(material))).toList();
+                    return tag.getValues().stream().map(material -> new StackReference(WolfyUtilCore.getInstance(), 1, 1, BukkitStackIdentifier.ID, new ItemStack(material))).toList();
                 }
             } else {
                 // TODO: Redo CustomTags and support them
