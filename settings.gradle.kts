@@ -93,18 +93,35 @@ plugins {
  *
  * The Editor and UI modules are optional and provide a way to edit content in-game.
  */
+/**
+ * The Fabric module is not updated to 26.3 yet: Minecraft 26.3 moved recipes into a
+ * dynamic registry and removed the `RecipeManager#prepare` hook the Fabric module relies
+ * on. It is excluded from the default build until that is reworked and can be included
+ * again with `-PincludeFabric=true`.
+ */
+val includeFabric = providers.gradleProperty("includeFabric")
+    .map(String::toBoolean)
+    .getOrElse(false)
+
 sequenceOf(
     "api",
     "common",
     "spigotlike",
     "spigot",
     "paper",
-    "fabric",
 ).forEach {
     include(":core:${it}")
     project(":core:${it}").apply {
         projectDir = file("core/${it.replace(":", "/")}")
         name = "core-${it.replace(":", "-")}"
+    }
+}
+
+if (includeFabric) {
+    include(":core:fabric")
+    project(":core:fabric").apply {
+        projectDir = file("core/fabric")
+        name = "core-fabric"
     }
 }
 

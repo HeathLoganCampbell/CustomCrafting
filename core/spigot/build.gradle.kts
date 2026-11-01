@@ -68,6 +68,10 @@ tasks {
         }
         metaInf.duplicatesStrategy = DuplicatesStrategy.FAIL
 
+        manifest {
+            attributes["paperweight-mappings-namespace"] = "mojang"
+        }
+
         relocate("org.bstats", "com.wolfyscript.customcrafting.spigot.bstats")
         relocate("io.sentry", "com.wolfyscript.customcrafting.core.sentry")
     }
@@ -78,7 +82,7 @@ tasks {
 }
 
 artifacts {
-    archives(tasks.reobfJar)
+    archives(tasks.shadowJar)
 }
 
 bukkitPluginYaml {
