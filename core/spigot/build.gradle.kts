@@ -45,6 +45,12 @@ dependencies {
 
 val customArchiveName = archiveName("spigot", sharedLibs.versions.minecraft.get())
 
+// ShadowJar's dependencies block shadows the `project` accessor, so capture the project dependencies first.
+val coreApiDependency = projects.core.coreApi
+val coreCommonDependency = projects.core.coreCommon
+val coreSpigotlikeDependency = projects.core.coreSpigotlike
+val coreSpigotDependency = projects.core.coreSpigot
+
 tasks {
     shadowJar {
         archiveFileName.set("${customArchiveName}.jar")
@@ -52,10 +58,10 @@ tasks {
         finalizedBy("spigot_copy")
 
         dependencies {
-            include(project(project.projects.core.coreApi))
-            include(project(project.projects.core.coreCommon))
-            include(project(project.projects.core.coreSpigotlike))
-            include(project(project.projects.core.coreSpigot))
+            include(project(coreApiDependency))
+            include(project(coreCommonDependency))
+            include(project(coreSpigotlikeDependency))
+            include(project(coreSpigotDependency))
             sharedLibs.bundles.sentry.get().forEach {
                 include(dependency(it))
             }

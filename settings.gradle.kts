@@ -37,7 +37,7 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("sharedLibs") {
-            from("com.wolfyscript.scafall:scafall-versions:1.6.1")
+            from("com.wolfyscript.scafall:scafall-versions:2.0.0")
         }
     }
 }
@@ -116,28 +116,37 @@ sequenceOf(
  * - use-cases, that contain the logic to modify the models,
  * - the repository that stores the data,
  * - and the CLI that allows editing recipes via commands.
- */
-sequenceOf(
-    "common"
-).forEach {
-    include(":editor:${it}")
-    project(":editor:${it}").apply {
-        projectDir = file("editor/${it.replace(":", "/")}")
-        name = "editor-${it.replace(":", "-")}"
-    }
-}
-
-/**
+ *
  * # UI
  * > Requires the Editor module.
  * Adds a UI that allows editing and creating content with an in-game UI.
+ *
+ * Both modules depend on `viewportl` snapshot builds that are not published to a public
+ * repository. They are optional and not required for the plugin jars, so they are only
+ * included when explicitly enabled with `-PincludeEditorUi=true`.
  */
-sequenceOf(
-    "common"
-).forEach {
-    include(":ui:${it}")
-    project(":ui:${it}").apply {
-        projectDir = file("ui/${it.replace(":", "/")}")
-        name = "ui-${it.replace(":", "-")}"
+val includeEditorUi = providers.gradleProperty("includeEditorUi")
+    .map(String::toBoolean)
+    .getOrElse(false)
+
+if (includeEditorUi) {
+    sequenceOf(
+        "common"
+    ).forEach {
+        include(":editor:${it}")
+        project(":editor:${it}").apply {
+            projectDir = file("editor/${it.replace(":", "/")}")
+            name = "editor-${it.replace(":", "-")}"
+        }
+    }
+
+    sequenceOf(
+        "common"
+    ).forEach {
+        include(":ui:${it}")
+        project(":ui:${it}").apply {
+            projectDir = file("ui/${it.replace(":", "/")}")
+            name = "ui-${it.replace(":", "-")}"
+        }
     }
 }

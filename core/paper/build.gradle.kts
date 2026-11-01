@@ -23,6 +23,12 @@ dependencies {
 
 val customArchiveName = archiveName("paper", sharedLibs.versions.minecraft.get())
 
+// ShadowJar's dependencies block shadows the `project` accessor, so capture the project dependencies first.
+val coreApiDependency = projects.core.coreApi
+val coreCommonDependency = projects.core.coreCommon
+val coreSpigotlikeDependency = projects.core.coreSpigotlike
+val corePaperDependency = projects.core.corePaper
+
 tasks {
     shadowJar {
         // Mappings are in the runtime classpath. Not sure why they are included even though we use include for dependencies...
@@ -32,10 +38,10 @@ tasks {
         archiveFileName.set("${customArchiveName}.jar")
         metaInf.duplicatesStrategy = DuplicatesStrategy.FAIL
         dependencies {
-            include(project(project.projects.core.coreApi))
-            include(project(project.projects.core.coreCommon))
-            include(project(project.projects.core.coreSpigotlike))
-            include(project(project.projects.core.corePaper))
+            include(project(coreApiDependency))
+            include(project(coreCommonDependency))
+            include(project(coreSpigotlikeDependency))
+            include(project(corePaperDependency))
 
             sharedLibs.bundles.sentry.get().forEach {
                 include(dependency(it))

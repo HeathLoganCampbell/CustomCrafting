@@ -31,8 +31,7 @@ internal class CommandResultAction(
 
     }
 
-    private val defaultName: String = "CustomCrafting@"
-    private val defaultCompName = Component.literal(defaultName)
+    private val defaultCompName = Component.literal("CustomCrafting@")
 
     override fun run(context: EvaluationContext, bulk: Boolean) {
         val player = context.player?.unwrap()
@@ -57,11 +56,9 @@ internal class CommandResultAction(
             Vec2(0.0f, 0.0f),
             level,
             LevelBasedPermissionSet.GAMEMASTER,
-            defaultName,
             defaultCompName,
-            server,
-            player
-        )
+            server
+        ).let { stack -> if (player != null) stack.withEntity(player) else stack }
 
         for (command in commands) {
             server.commands.performPrefixedCommand(srcStack, command)

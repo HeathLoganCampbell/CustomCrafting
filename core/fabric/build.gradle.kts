@@ -36,6 +36,10 @@ dependencies {
 
 val customArchiveName = archiveName("fabric", sharedLibs.versions.minecraft.get())
 
+// ShadowJar's dependencies block shadows the `project` accessor, so capture the project dependencies first.
+val coreApiDependency = projects.core.coreApi
+val coreCommonDependency = projects.core.coreCommon
+
 tasks {
     processResources {
         doNotTrackState("Always process resources to stay up-to-date with versions")
@@ -58,8 +62,8 @@ tasks {
         finalizedBy("fabric_copy")
 
         dependencies {
-            include(project(project.projects.core.coreApi))
-            include(project(project.projects.core.coreCommon))
+            include(project(coreApiDependency))
+            include(project(coreCommonDependency))
 
             sharedLibs.bundles.sentry.get().forEach {
                 include(dependency(it))
